@@ -1,0 +1,47 @@
+name: ${project.name}
+version: ${project.build.version}
+description: ${project.description}
+author: flamin_scotsman
+website: ${project.url}
+main: me.flamin.lilypadTabList.lilypadTabList
+database: false
+depend: [ProtocolLib, lilyPadOnlinePlayers]
+softdepend: [Vault]
+
+commands:
+  listtabmembers:
+    aliases: tablist
+    description: Lists the people tablist believes is online.
+    permission: lilypadTabList.list
+    usage: |
+      Lists online players.
+      Aliases: /tablist
+  listformattedtabmembers:
+    aliases: formatlist
+    description: Shows the mapping between players and displayed tab entires.
+    permission: lilypadTabList.list
+    usage: |
+      Lists formatted name mappings.
+      Aliases: /formatlist
+  tabnamerefresh:
+    description: Refreshes the formatted name of either the specified user or all online players.
+    permission: lilypadTabList.refresh
+    usage: /<command> [playername]
+  tablistsync:
+    description: Synchronises the formatted names to those in the list of online hub players.
+    permission: lilypadTabList.sync
+    usage: /<command> [playername]
+
+permissions:
+  lilypadTabList.list:
+    description: Allows a user to list the currently online players.
+    default: op
+  lilypadTabList.refresh:
+    description: Allows a user to trigger a refresh of a tab entry.
+    default: op
+  lilypadTabList.sync:
+    description: Allows a user to trigger a tab list resynchronisation.
+    default: op
+  lilypadTabList.viewHidden:
+    description: Allows a user to see vanished players.
+    default: op
