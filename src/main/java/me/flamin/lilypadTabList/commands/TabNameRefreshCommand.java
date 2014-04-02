@@ -43,7 +43,7 @@ public class TabNameRefreshCommand implements CommandExecutor {
             String player = entry.getKey();
             if (entry.getKey().startsWith(matcher)) {
                 entry.setValue(
-                        plugin.formatPlayerName(player, plugin.lilypadOnlinePlayers.getPlayer(player).getWorld())
+                        plugin.formatPlayerName(player, plugin.lilypadOnlinePlayersHandler.getPlayer(player).getWorld())
                 );
             }
         }
@@ -53,7 +53,7 @@ public class TabNameRefreshCommand implements CommandExecutor {
         for (Map.Entry<String, String> entry : plugin.formattedNames.entrySet()) {
             String player = entry.getKey();
             entry.setValue(
-                    plugin.formatPlayerName(player, plugin.lilypadOnlinePlayers.getPlayer(player).getWorld())
+                    plugin.formatPlayerName(player, plugin.lilypadOnlinePlayersHandler.getPlayer(player).getWorld())
             );
         }
     }

@@ -52,7 +52,7 @@ dependencies {
     compile group: 'org.bukkit', name: 'bukkit', version: '1.7.2-R0.3'
     compile group: 'net.milkbowl.vault', name: 'Vault', version: '1.2.32', ext: 'jar'
     compile group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '3.2.0', ext: 'jar'
-    compile group: 'me.flamin', name: 'lilypadOnlinePlayers', version: '2.0.0', ext: 'jar'
+    compile group: 'me.flamin', name: 'lilypadOnlinePlayers', version: '2.1.0', ext: 'jar'
     compile group: 'lilypad.client.connect', name: 'api', version: '0.0.1-SNAPSHOT', ext: 'jar'
 }
 
@@ -94,6 +94,6 @@ uploadArchives {
     }
 }
 
-task release(dependsOn: 'build') << {
+task release(dependsOn: 'uploadArchives') << {
     println "Building release!"
 }

@@ -32,7 +32,7 @@ public class LilypadOnlinePlayersListeners implements Listener {
     public void onHubPlayerLogin(final HubPlayerJoinEvent event) {
         if (lilypadTabList.DEBUG)
             plugin.getLogger().severe("Player " + event.getName() + " has joined " + event.getWorld());
-        if (plugin.lilypadOnlinePlayers.getPlayer(event.getName()).getServer().equals(plugin.servername))
+        if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
         String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld());
         plugin.formattedNames.put(event.getName(), formattedName);
@@ -56,7 +56,7 @@ public class LilypadOnlinePlayersListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onHubPlayerQuit(final HubPlayerQuitEvent event) {
-        if (plugin.lilypadOnlinePlayers.getPlayer(event.getName()).getServer().equals(plugin.servername))
+        if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
         if (!plugin.formattedNames.containsKey(event.getName())) {
             if (lilypadTabList.DEBUG)
@@ -88,7 +88,7 @@ public class LilypadOnlinePlayersListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onHubPlayerWorldChange(final HubPlayerWorldChangeEvent event) {
-        if (plugin.lilypadOnlinePlayers.getPlayer(event.getName()).getServer().equals(plugin.servername))
+        if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
         String oldFormattedName = plugin.formattedNames.get(event.getName());
         String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld());
@@ -119,9 +119,9 @@ public class LilypadOnlinePlayersListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onHubPlayerVisibilityChange(final HubPlayerVisibilityChangeEvent event) {
-        if (plugin.lilypadOnlinePlayers.getPlayer(event.getName()).getServer().equals(plugin.servername))
+        if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
-        PlayerEntry entry = plugin.lilypadOnlinePlayers.getPlayer(event.getName());
+        PlayerEntry entry = plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName());
         String oldFormattedName = plugin.formattedNames.get(event.getName());
         String formattedName = plugin.formatPlayerName(event.getName(), entry.getWorld(), !event.isVanishing());
         try {

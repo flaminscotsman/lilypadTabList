@@ -11,7 +11,7 @@ import me.flamin.lilypadTabList.listeners.PlayerListener;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import me.flamin.lilypadOnlinePlayers.LilypadOnlinePlayers;
+import me.flamin.lilypadOnlinePlayers.LilypadOnlinePlayersHandler;
 import net.milkbowl.vault.chat.Chat;
 
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public final class lilypadTabList extends JavaPlugin {
     public static final boolean DEBUG = false;
     private static final Matcher matcher = Pattern.compile("(&[0-9a-fk-orA-FK-OR])").matcher("");
     public final Map<String, String> formattedNames = new HashMap<String, String>();
-    public LilypadOnlinePlayers lilypadOnlinePlayers;
+    public LilypadOnlinePlayersHandler lilypadOnlinePlayersHandler;
     public ProtocolManager protocolManager;
     public String servername;
     private Chat chat;
@@ -43,7 +43,7 @@ public final class lilypadTabList extends JavaPlugin {
 
         protocolManager = ProtocolLibrary.getProtocolManager();
 
-        servername = lilypadOnlinePlayers.getServerName();
+        servername = lilypadOnlinePlayersHandler.getServerName();
         getServer().getPluginManager().registerEvents(new LilypadOnlinePlayersListeners(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
@@ -64,9 +64,10 @@ public final class lilypadTabList extends JavaPlugin {
     }
 
     private boolean hookOnlinePlayers() {
-        RegisteredServiceProvider<LilypadOnlinePlayers> rsp = getServer().getServicesManager().getRegistration(LilypadOnlinePlayers.class);
-        lilypadOnlinePlayers = rsp.getProvider();
-        return lilypadOnlinePlayers != null;
+        RegisteredServiceProvider<LilypadOnlinePlayersHandler> rsp =
+                getServer().getServicesManager().getRegistration(LilypadOnlinePlayersHandler.class);
+        lilypadOnlinePlayersHandler = rsp.getProvider();
+        return lilypadOnlinePlayersHandler != null;
     }
 
     public String formatPlayerName(String player, String world) {

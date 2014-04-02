@@ -55,7 +55,7 @@ public class PlayerListener implements Listener {
                     String entryName = entry.getKey();
                     String formattedEntryName = entry.getValue();
 
-                    if (!plugin.lilypadOnlinePlayers.containsPlayer(entryName)) {
+                    if (!plugin.lilypadOnlinePlayersHandler.containsPlayer(entryName)) {
                         try {
                             PacketContainer packet = playerListConstructor.createPacket(
                                     formattedEntryName, false, 0
@@ -78,7 +78,7 @@ public class PlayerListener implements Listener {
                         continue;
                     }
 
-                    if (plugin.lilypadOnlinePlayers.getPlayer(entryName).getServer().equals(plugin.servername))
+                    if (plugin.lilypadOnlinePlayersHandler.getPlayer(entryName).getServer().equals(plugin.servername))
                         continue; // We don't wish to handle players currently on this server
 
                     PacketContainer packet = playerListConstructor.createPacket(

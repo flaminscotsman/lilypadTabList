@@ -62,7 +62,7 @@ public class TabListSyncCommand implements CommandExecutor {
     }
 
     private void repopulateTabLists() {
-        for (Map.Entry<String, PlayerEntry> entry : plugin.lilypadOnlinePlayers.getPlayers().entrySet()) {
+        for (Map.Entry<String, PlayerEntry> entry : plugin.lilypadOnlinePlayersHandler.getPlayers().entrySet()) {
             String playerName = entry.getValue().getName();
             String playerWorld = entry.getValue().getWorld();
             boolean playerVisible = entry.getValue().getVisible();
