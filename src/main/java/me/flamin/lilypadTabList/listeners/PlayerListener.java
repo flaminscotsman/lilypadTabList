@@ -81,6 +81,9 @@ public class PlayerListener implements Listener {
                     if (plugin.lilypadOnlinePlayersHandler.getPlayer(entryName).getServer().equals(plugin.servername))
                         continue; // We don't wish to handle players currently on this server
 
+                    if (!plugin.lilypadOnlinePlayersHandler.getPlayer(entryName).getVisible() && !player.hasPermission("lilypadTabList.viewHidden"))
+                        continue; // Only show vanished players if they have permission to see them
+
                     PacketContainer packet = playerListConstructor.createPacket(
                             formattedEntryName, true, 0
                     );

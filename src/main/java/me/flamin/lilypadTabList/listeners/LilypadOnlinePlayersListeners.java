@@ -45,6 +45,8 @@ public class LilypadOnlinePlayersListeners implements Listener {
             }
 
             for (Player receiver : plugin.getServer().getOnlinePlayers()) {
+                if (!event.getVisibility() && !receiver.hasPermission("lilypadTabList.viewHidden"))
+                    continue; // Only show vanished players if they have permission to see them
                 plugin.protocolManager.sendServerPacket(receiver, packet);
             }
         } catch (FieldAccessException e) {
@@ -90,6 +92,9 @@ public class LilypadOnlinePlayersListeners implements Listener {
     public void onHubPlayerWorldChange(final HubPlayerWorldChangeEvent event) {
         if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
+        boolean visible = true;
+        if (plugin.lilypadOnlinePlayersHandler.containsPlayer(event.getName()))
+            visible = plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getVisible();
         String oldFormattedName = plugin.formattedNames.get(event.getName());
         String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld());
         try {
@@ -108,6 +113,8 @@ public class LilypadOnlinePlayersListeners implements Listener {
 
             for (Player receiver : plugin.getServer().getOnlinePlayers()) {
                 plugin.protocolManager.sendServerPacket(receiver, oldNamePacket);
+                if (!visible && !receiver.hasPermission("lilypadTabList.viewHidden"))
+                    continue; // Only show vanished players if they have permission to see them
                 plugin.protocolManager.sendServerPacket(receiver, newNamePacket);
             }
         } catch (FieldAccessException e) {
