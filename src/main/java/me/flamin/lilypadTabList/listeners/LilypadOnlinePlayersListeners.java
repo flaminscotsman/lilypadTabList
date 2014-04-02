@@ -34,7 +34,8 @@ public class LilypadOnlinePlayersListeners implements Listener {
             plugin.getLogger().severe("Player " + event.getName() + " has joined " + event.getWorld());
         if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
-        String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld(), event.getVisibility());
+
+        String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld(), event.getVisibile());
         plugin.formattedNames.put(event.getName(), formattedName);
         try {
             PacketContainer packet = playerListConstructor.createPacket(
@@ -45,7 +46,7 @@ public class LilypadOnlinePlayersListeners implements Listener {
             }
 
             for (Player receiver : plugin.getServer().getOnlinePlayers()) {
-                if (!event.getVisibility() && !receiver.hasPermission("lilypadTabList.viewHidden"))
+                if (!event.getVisibile() && !receiver.hasPermission("lilypadTabList.viewHidden"))
                     continue; // Only show vanished players if they have permission to see them
                 plugin.protocolManager.sendServerPacket(receiver, packet);
             }
@@ -92,11 +93,13 @@ public class LilypadOnlinePlayersListeners implements Listener {
     public void onHubPlayerWorldChange(final HubPlayerWorldChangeEvent event) {
         if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
+
         boolean visible = true;
         if (plugin.lilypadOnlinePlayersHandler.containsPlayer(event.getName()))
             visible = plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getVisible();
         String oldFormattedName = plugin.formattedNames.get(event.getName());
-        String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld());
+        String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld(), visible);
+
         try {
             PacketContainer oldNamePacket = playerListConstructor.createPacket(
                     oldFormattedName, false, 0
@@ -130,21 +133,21 @@ public class LilypadOnlinePlayersListeners implements Listener {
             return;
         PlayerEntry entry = plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName());
         String oldFormattedName = plugin.formattedNames.get(event.getName());
-        String formattedName = plugin.formatPlayerName(event.getName(), entry.getWorld(), !event.isVanishing());
+        String formattedName = plugin.formatPlayerName(event.getName(), entry.getWorld(), event.isVisible());
         try {
-            PacketContainer packet = playerListConstructor.createPacket(
-                    event.isVanishing() ? oldFormattedName : formattedName, !event.isVanishing(), 0
+            PacketContainer visiblePacket = playerListConstructor.createPacket(
+                    event.isVisible() ? formattedName : oldFormattedName, event.isVisible(), 0
             );
 
-            PacketContainer hiddenPacket = playerListConstructor.createPacket(
+            PacketContainer vanishedPacket = playerListConstructor.createPacket(
                     event.isVanishing() ? formattedName : oldFormattedName, event.isVanishing(), 0
             );
 
             for (Player receiver : plugin.getServer().getOnlinePlayers()) {
                 // All payers get the entry removed on vanish
-                plugin.protocolManager.sendServerPacket(receiver, packet);
+                plugin.protocolManager.sendServerPacket(receiver, visiblePacket);
                 if (receiver.hasPermission("lilypadTabList.viewHidden"))
-                    plugin.protocolManager.sendServerPacket(receiver, hiddenPacket);
+                    plugin.protocolManager.sendServerPacket(receiver, vanishedPacket);
             }
         } catch (FieldAccessException e) {
             e.printStackTrace();

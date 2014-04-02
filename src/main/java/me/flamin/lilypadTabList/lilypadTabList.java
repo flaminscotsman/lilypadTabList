@@ -75,18 +75,13 @@ public final class lilypadTabList extends JavaPlugin {
     }
 
     public String formatPlayerName(String player, String world, boolean visible) {
-        String prefix;
-        if (chat != null) {
-            prefix = chat.getPlayerPrefix(world, player);
-        } else {
-            prefix = "&r";
-        }
+        String prefix = (chat != null) ? chat.getPlayerPrefix(world, player) : "&r";
 
         matcher.reset(prefix);
-        String colourcode = "&r";
+        String colourCode = "&r";
         while(matcher.find())
-            colourcode = matcher.group(1);
-        player = ChatColor.translateAlternateColorCodes('&', (colourcode + player));
+            colourCode = matcher.group(1);
+        player = ChatColor.translateAlternateColorCodes('&', (colourCode + player));
 
         boolean first = true;
         StringBuilder prefixBuilder = new StringBuilder();
