@@ -5,7 +5,7 @@ author: flamin_scotsman
 website: ${project.url}
 main: me.flamin.lilypadTabList.lilypadTabList
 database: false
-depend: [ProtocolLib, lilyPadOnlinePlayers]
+depend: [ProtocolLib, lilypadOnlinePlayers]
 softdepend: [Vault]
 
 commands:

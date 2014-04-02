@@ -93,7 +93,7 @@ public final class lilypadTabList extends JavaPlugin {
         for (String prefixType: getConfig().getStringList("prefixPrecedence")) {
             boolean prefixTest = false;
             if (prefixType.equalsIgnoreCase("invisible")) {
-                prefixTest = visible;
+                prefixTest = !visible;
             } else if (prefixType.equalsIgnoreCase("op")) {
                 prefixTest = false;
             } else if (prefixType.equalsIgnoreCase("creative")) {
@@ -108,7 +108,7 @@ public final class lilypadTabList extends JavaPlugin {
             first = false;
         }
 
-        if (first && visible)
+        if (first && !visible)
             prefixBuilder.append(getConfig().getString("invisiblePrefix", "?"));
 
         player = prefixBuilder.toString() + ((prefixBuilder.length() == 0)?"":getConfig().getString("prefixDelimiter", ":")) + player;

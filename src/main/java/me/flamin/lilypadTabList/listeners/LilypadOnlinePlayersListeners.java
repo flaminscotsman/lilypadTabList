@@ -34,7 +34,7 @@ public class LilypadOnlinePlayersListeners implements Listener {
             plugin.getLogger().severe("Player " + event.getName() + " has joined " + event.getWorld());
         if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
-        String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld());
+        String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld(), event.getVisibility());
         plugin.formattedNames.put(event.getName(), formattedName);
         try {
             PacketContainer packet = playerListConstructor.createPacket(
