@@ -63,10 +63,9 @@ public class TabListSyncCommand implements CommandExecutor {
 
     private void repopulateTabLists() {
         for (Map.Entry<String, PlayerEntry> entry : plugin.lilypadOnlinePlayersHandler.getPlayers().entrySet()) {
-            String playerName = entry.getValue().getName();
-            String playerWorld = entry.getValue().getWorld();
-            boolean playerVisible = entry.getValue().getVisible();
-            String formattedName = plugin.formatPlayerName(playerName, playerWorld, playerVisible);
+            PlayerEntry player = entry.getValue();
+            boolean playerVisible = player.getVisible();
+            String formattedName = plugin.formatPlayerName(player.getUUID(), player.getWorld(), player.getVisible());
 
             try {
                 PacketContainer packet = playerListConstructor.createPacket(
@@ -86,7 +85,7 @@ public class TabListSyncCommand implements CommandExecutor {
                 e.printStackTrace();
             }
 
-            plugin.formattedNames.put(playerName, formattedName);
+            plugin.formattedNames.put(player.getName(), formattedName);
         }
     }
 }

@@ -35,11 +35,11 @@ public class LilypadOnlinePlayersListeners implements Listener {
         if (plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getServer().equals(plugin.servername))
             return;
 
-        String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld(), event.getVisibile());
+        String formattedName = plugin.formatPlayerName(event.getUUID(), event.getWorld(), event.getVisibile());
         plugin.formattedNames.put(event.getName(), formattedName);
         try {
             PacketContainer packet = playerListConstructor.createPacket(
-                    plugin.formatPlayerName(event.getName(), event.getWorld()), true, 0
+                    plugin.formatPlayerName(event.getUUID(), event.getWorld()), true, 0
             );
             if (lilypadTabList.DEBUG) {
                 plugin.getLogger().severe("Adding " + formattedName + " to the tab list.");
@@ -98,7 +98,7 @@ public class LilypadOnlinePlayersListeners implements Listener {
         if (plugin.lilypadOnlinePlayersHandler.containsPlayer(event.getName()))
             visible = plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName()).getVisible();
         String oldFormattedName = plugin.formattedNames.get(event.getName());
-        String formattedName = plugin.formatPlayerName(event.getName(), event.getWorld(), visible);
+        String formattedName = plugin.formatPlayerName(event.getUUID(), event.getWorld(), visible);
 
         try {
             PacketContainer oldNamePacket = playerListConstructor.createPacket(
@@ -133,7 +133,7 @@ public class LilypadOnlinePlayersListeners implements Listener {
             return;
         PlayerEntry entry = plugin.lilypadOnlinePlayersHandler.getPlayer(event.getName());
         String oldFormattedName = plugin.formattedNames.get(event.getName());
-        String formattedName = plugin.formatPlayerName(event.getName(), entry.getWorld(), event.isVisible());
+        String formattedName = plugin.formatPlayerName(event.getUUID(), entry.getWorld(), event.isVisible());
         try {
             PacketContainer visiblePacket = playerListConstructor.createPacket(
                     event.isVisible() ? formattedName : oldFormattedName, event.isVisible(), 0

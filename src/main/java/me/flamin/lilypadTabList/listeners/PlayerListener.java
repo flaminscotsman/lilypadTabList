@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 public class PlayerListener implements Listener {
     private final lilypadTabList plugin;
@@ -32,9 +33,10 @@ public class PlayerListener implements Listener {
             return; // We do not wish to track blocked logins
 
         Player playerEntity = event.getPlayer();
-        String formattedPlayerName = plugin.formatPlayerName(playerEntity.getName(), playerEntity.getWorld().getName());
+        String formattedPlayerName = plugin.formatPlayerName(playerEntity.getUniqueId(), playerEntity.getWorld().getName());
         playerEntity.setPlayerListName(formattedPlayerName);
 
+        final UUID playerID = playerEntity.getUniqueId();
         final String playerName = playerEntity.getName();
 
         if (lilypadTabList.DEBUG)
@@ -46,7 +48,7 @@ public class PlayerListener implements Listener {
                 if (lilypadTabList.DEBUG)
                     plugin.getLogger().severe("Processing packets for " + playerName);
 
-                Player player = plugin.getServer().getPlayerExact(playerName);
+                Player player = plugin.getServer().getPlayer(playerID);
                 if (player == null)
                     return;
 

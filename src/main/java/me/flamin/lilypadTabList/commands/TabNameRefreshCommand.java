@@ -1,5 +1,6 @@
 package me.flamin.lilypadTabList.commands;
 
+import me.flamin.lilypadOnlinePlayers.PlayerEntry;
 import me.flamin.lilypadTabList.lilypadTabList;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,10 +41,10 @@ public class TabNameRefreshCommand implements CommandExecutor {
 
     private void refreshFilteredPlayers(String matcher) {
         for (Map.Entry<String, String> entry : plugin.formattedNames.entrySet()) {
-            String player = entry.getKey();
+            PlayerEntry player = plugin.lilypadOnlinePlayersHandler.getPlayer(entry.getKey());
             if (entry.getKey().startsWith(matcher)) {
                 entry.setValue(
-                        plugin.formatPlayerName(player, plugin.lilypadOnlinePlayersHandler.getPlayer(player).getWorld())
+                        plugin.formatPlayerName(player.getUUID(), player.getWorld())
                 );
             }
         }
@@ -51,9 +52,9 @@ public class TabNameRefreshCommand implements CommandExecutor {
 
     private void refreshAllPlayers() {
         for (Map.Entry<String, String> entry : plugin.formattedNames.entrySet()) {
-            String player = entry.getKey();
+            PlayerEntry player = plugin.lilypadOnlinePlayersHandler.getPlayer(entry.getKey());
             entry.setValue(
-                    plugin.formatPlayerName(player, plugin.lilypadOnlinePlayersHandler.getPlayer(player).getWorld())
+                    plugin.formatPlayerName(player.getUUID(), player.getWorld())
             );
         }
     }

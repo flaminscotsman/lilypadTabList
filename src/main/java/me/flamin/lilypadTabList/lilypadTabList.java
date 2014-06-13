@@ -9,6 +9,7 @@ import me.flamin.lilypadTabList.commands.ListTabMembersCommand;
 import me.flamin.lilypadTabList.listeners.LilypadOnlinePlayersListeners;
 import me.flamin.lilypadTabList.listeners.PlayerListener;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import me.flamin.lilypadOnlinePlayers.LilypadOnlinePlayersHandler;
@@ -16,6 +17,7 @@ import net.milkbowl.vault.chat.Chat;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,10 +72,14 @@ public final class lilypadTabList extends JavaPlugin {
         return lilypadOnlinePlayersHandler != null;
     }
 
-    public String formatPlayerName(String player, String world) {
+    @Deprecated
+    public String formatPlayerName(String player, String world) { return formatPlayerName(player, world, true); }
+
+    public String formatPlayerName(UUID player, String world) {
         return formatPlayerName(player, world, true);
     }
 
+    @Deprecated
     public String formatPlayerName(String player, String world, boolean visible) {
         String prefix = (chat != null) ? chat.getPlayerPrefix(world, player) : "&r";
 
@@ -110,5 +116,45 @@ public final class lilypadTabList extends JavaPlugin {
 
         player = player.substring(0, Math.min(player.length(), 16));
         return player;
+    }
+
+    public String formatPlayerName(UUID playerID, String world, boolean visible) {
+        OfflinePlayer player = this.getServer().getOfflinePlayer(playerID);
+        String prefix = (chat != null) ? chat.getPlayerPrefix(world, player) : "&r";
+        String name = player.getName();
+
+        matcher.reset(prefix);
+        String colourCode = "&r";
+        while(matcher.find())
+            colourCode = matcher.group(1);
+        name = ChatColor.translateAlternateColorCodes('&', (colourCode + name));
+
+        boolean first = true;
+        StringBuilder prefixBuilder = new StringBuilder();
+        for (String prefixType: getConfig().getStringList("prefixPrecedence")) {
+            boolean prefixTest = false;
+            if (prefixType.equalsIgnoreCase("invisible")) {
+                prefixTest = !visible;
+            } else if (prefixType.equalsIgnoreCase("op")) {
+                prefixTest = false;
+            } else if (prefixType.equalsIgnoreCase("creative")) {
+                prefixTest = false;
+            }
+
+            if (first || getConfig().getBoolean("mergePrefixes", false)) {
+                String itemPrefix = getConfig().getString(prefixType + "Prefix");
+                if (itemPrefix != null)
+                    prefixBuilder.append(prefixTest ? "" : itemPrefix);
+            }
+            first = false;
+        }
+
+        if (first && !visible)
+            prefixBuilder.append(getConfig().getString("invisiblePrefix", "?"));
+
+        name = prefixBuilder.toString() + ((prefixBuilder.length() == 0)?"":getConfig().getString("prefixDelimiter", ":")) + name;
+
+        name = name.substring(0, Math.min(name.length(), 16));
+        return name;
     }
 }
