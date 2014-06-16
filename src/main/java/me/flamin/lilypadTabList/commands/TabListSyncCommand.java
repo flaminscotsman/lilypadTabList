@@ -65,7 +65,7 @@ public class TabListSyncCommand implements CommandExecutor {
         for (Map.Entry<String, PlayerEntry> entry : plugin.lilypadOnlinePlayersHandler.getPlayers().entrySet()) {
             PlayerEntry player = entry.getValue();
             boolean playerVisible = player.getVisible();
-            String formattedName = plugin.formatPlayerName(player.getUUID(), player.getWorld(), player.getVisible());
+            String formattedName = plugin.formatPlayerName(player);
 
             try {
                 PacketContainer packet = playerListConstructor.createPacket(

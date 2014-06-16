@@ -33,20 +33,38 @@ public class PlayerListener implements Listener {
             return; // We do not wish to track blocked logins
 
         Player playerEntity = event.getPlayer();
-        String formattedPlayerName = plugin.formatPlayerName(playerEntity.getUniqueId(), playerEntity.getWorld().getName());
-        playerEntity.setPlayerListName(formattedPlayerName);
+        String formattedPlayerName = plugin.formatPlayerName(playerEntity.getName(), playerEntity.getUniqueId(), playerEntity.getWorld().getName());
+
+        if (lilypadTabList.DEBUG)
+            plugin.getLogger().severe(String.format(
+                    "[%1$s] - Setting %2$s's tab entry to %3$s.",
+                    plugin.getDescription().getName(),
+                    playerEntity.getName(),
+                    formattedPlayerName
+            ));
+
+        try {
+            playerEntity.setPlayerListName(formattedPlayerName);
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().severe(String.format(
+                    "[%1$s] - Error colouring local player %2$s's name - duplicate entry found",
+                    plugin.getDescription().getName(),
+                    playerEntity.getName()
+            ));
+        }
 
         final UUID playerID = playerEntity.getUniqueId();
         final String playerName = playerEntity.getName();
-
-        if (lilypadTabList.DEBUG)
-            plugin.getLogger().severe("Renaming " + playerEntity.getName() + " to " + formattedPlayerName + ".");
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override
             public void run() {
                 if (lilypadTabList.DEBUG)
-                    plugin.getLogger().severe("Processing packets for " + playerName);
+                    plugin.getLogger().severe(String.format(
+                            "[%1$s] - Processing packets for %2$s.",
+                            plugin.getDescription().getName(),
+                            playerName
+                    ));
 
                 Player player = plugin.getServer().getPlayer(playerID);
                 if (player == null)
@@ -64,8 +82,11 @@ public class PlayerListener implements Listener {
                             );
 
                             if (lilypadTabList.DEBUG)
-                                plugin.getLogger().severe("Removing expired player " + playerName
-                                        + " from the tab list.");
+                                plugin.getLogger().severe(String.format(
+                                        "[%1$s] - Removing expired player %2$s from the tab list.",
+                                        plugin.getDescription().getName(),
+                                        entryName
+                                ));
 
                             for (Player receiver : plugin.getServer().getOnlinePlayers()) {
                                 plugin.protocolManager.sendServerPacket(receiver, packet);
@@ -91,9 +112,12 @@ public class PlayerListener implements Listener {
                     );
 
                     if (lilypadTabList.DEBUG)
-                        plugin.getLogger().severe(
-                                "Sending packet corresponding to " + entryName + " to " + playerName
-                        );
+                        plugin.getLogger().severe(String.format(
+                                "[%1$s] - Sending packet corresponding to %2$s to %3$s.",
+                                plugin.getDescription().getName(),
+                                entryName,
+                                playerName
+                        ));
 
                     try {
                         plugin.protocolManager.sendServerPacket(player, packet);

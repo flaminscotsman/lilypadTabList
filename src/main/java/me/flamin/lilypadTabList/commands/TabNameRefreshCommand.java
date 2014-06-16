@@ -44,7 +44,7 @@ public class TabNameRefreshCommand implements CommandExecutor {
             PlayerEntry player = plugin.lilypadOnlinePlayersHandler.getPlayer(entry.getKey());
             if (entry.getKey().startsWith(matcher)) {
                 entry.setValue(
-                        plugin.formatPlayerName(player.getUUID(), player.getWorld())
+                        plugin.formatPlayerName(player)
                 );
             }
         }
@@ -54,7 +54,7 @@ public class TabNameRefreshCommand implements CommandExecutor {
         for (Map.Entry<String, String> entry : plugin.formattedNames.entrySet()) {
             PlayerEntry player = plugin.lilypadOnlinePlayersHandler.getPlayer(entry.getKey());
             entry.setValue(
-                    plugin.formatPlayerName(player.getUUID(), player.getWorld())
+                    plugin.formatPlayerName(player)
             );
         }
     }

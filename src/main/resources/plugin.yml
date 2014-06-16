@@ -6,7 +6,7 @@ website: ${project.url}
 main: me.flamin.lilypadTabList.lilypadTabList
 database: false
 depend: [ProtocolLib, lilypadOnlinePlayers]
-softdepend: [Vault]
+softdepend: [Vault, zPermissions]
 
 commands:
   listtabmembers:
